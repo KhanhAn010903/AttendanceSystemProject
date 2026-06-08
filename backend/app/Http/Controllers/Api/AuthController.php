@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Spatie\Permission\Models\Role;
 
 class AuthController extends Controller
 {
@@ -22,6 +23,11 @@ class AuthController extends Controller
             'email' => $request->email,
             'password' => Hash::make($request->password),
         ]);
+        $roleDefault = Role::firstOrCreate([
+            'name' => 'Employee',
+            'guard_name' => 'web'
+        ]);
+        $user->assignRole($roleDefault);
         $token = $user->createToken('auth_token')->plainTextToken;
         return response()->json([
             'user' => $user,
