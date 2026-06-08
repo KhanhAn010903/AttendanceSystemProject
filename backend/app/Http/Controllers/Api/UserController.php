@@ -9,13 +9,13 @@ use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
 {
-    public function assignRoles(Request $request, User $user)
+    public function assignRoles(Request $request, $userId)
     {
         $data = $request->validate([
             'roles' => ['required', 'array', 'min:1'],
             'roles.*' => ['required', 'exists:roles,id'],
         ]);
-
+        $user = User::findOrFail($userId);
         $roles = Role::whereIn('id', $data['roles'])
             ->pluck('name')
             ->toArray();

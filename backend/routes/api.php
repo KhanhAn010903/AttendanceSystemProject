@@ -12,10 +12,10 @@ Route::get('/user', function (Request $request) {
 })->middleware('auth:sanctum');
 
 Route::middleware('auth:sanctum')->group(function () {
-    Route::put('/users/{user}/roles', [UserController::class, 'assignRoles']);
+    Route::post('/users/{user}/roles', [UserController::class, 'assignRoles']);
     Route::apiResource('roles', RoleController::class);
     Route::apiResource('permissions', PermissionController::class);
-    Route::post('/roles/{role}/permissions', [RoleController::class, 'assignPermissions']);
+    Route::post('/roles/{roleId}/permissions', [RoleController::class, 'assignPermissions']);
     Route::post('/logout', [AuthController::class, 'logout']);
 });
 

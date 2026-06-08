@@ -20,7 +20,8 @@ class PermissionController extends Controller
                 'required',
                 'string',
                 'unique:permissions,name'
-            ]
+            ],
+            'guard_name' => 'web',
         ]);
 
         $permission = Permission::create([
@@ -44,7 +45,8 @@ class PermissionController extends Controller
                 'required',
                 'string',
                 'unique:permissions,name,' . $permission->id
-            ]
+            ],
+            'guard_name' => 'web',
         ]);
 
         $permission->update($data);

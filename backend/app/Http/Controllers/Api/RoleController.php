@@ -8,13 +8,14 @@ use Spatie\Permission\Models\Role;
 
 class RoleController extends Controller
 {
-    public function assignPermissions(Request $request, Role $role)
+    public function assignPermissions(Request $request, $roleId)
     {
         $data = $request->validate([
             'permissions' => ['required', 'array'],
-            'permissions.*' => ['required', 'string', 'exists:permissions,name'],
+            'permissions.*' => ['exists:permissions,id'],
         ]);
 
+        $role = Role::findOrFail($roleId);
         $role->syncPermissions($data['permissions']);
 
         return response()->json([
