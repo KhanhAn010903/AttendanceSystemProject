@@ -9,6 +9,7 @@ import {
 } from '@/api/authStorage'
 
 const defaultLoginMessage = 'Dang nhap khong thanh cong. Vui long thu lai.'
+let fetchUserRequest = null
 
 export const useAuthStore = defineStore('auth', {
   state: () => ({
@@ -80,6 +81,20 @@ export const useAuthStore = defineStore('auth', {
         user,
       })
       return user
+    },
+
+    async ensureUser() {
+      if (!this.token || this.user) {
+        return this.user
+      }
+
+      if (!fetchUserRequest) {
+        fetchUserRequest = this.fetchUser().finally(() => {
+          fetchUserRequest = null
+        })
+      }
+
+      return fetchUserRequest
     },
   },
 })

@@ -1,39 +1,13 @@
 <script setup>
-import { computed, onMounted } from 'vue'
-import { storeToRefs } from 'pinia'
+import { onMounted } from 'vue'
 import { useRouter } from 'vue-router'
+import { useAccountDisplay } from '@/composables/useAccountDisplay'
 import { useAuthStore } from '@/stores/auth'
 
 const emit = defineEmits(['toggle-drawer'])
 const router = useRouter()
 const authStore = useAuthStore()
-const { user } = storeToRefs(authStore)
-
-const accountName = computed(() => user.value?.name || user.value?.email || 'Tai khoan')
-
-const accountSubtitle = computed(() => {
-  const roles = user.value?.roles
-
-  if (Array.isArray(roles) && roles.length > 0) {
-    return roles.map((role) => role.name || role).filter(Boolean).join(', ')
-  }
-
-  return user.value?.role?.name || user.value?.role || user.value?.email || 'Nguoi dung'
-})
-
-const accountInitials = computed(() => {
-  const nameParts = accountName.value.trim().split(/\s+/).filter(Boolean)
-
-  if (nameParts.length === 0) {
-    return 'TK'
-  }
-
-  return nameParts
-    .slice(0, 2)
-    .map((part) => part[0])
-    .join('')
-    .toUpperCase()
-})
+const { accountInitials, accountName, accountSubtitle, ensureUser } = useAccountDisplay()
 
 const accountMenuItems = [
   { title: 'Thông tin', icon: 'mdi-account-outline', to: '/account/profile' },
@@ -51,9 +25,7 @@ const handleAccountAction = async (item) => {
 }
 
 onMounted(() => {
-  if (authStore.token && !user.value) {
-    authStore.fetchUser().catch(() => {})
-  }
+  ensureUser().catch(() => {})
 })
 </script>
 

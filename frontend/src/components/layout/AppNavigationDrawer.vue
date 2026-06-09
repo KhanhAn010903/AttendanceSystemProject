@@ -1,5 +1,6 @@
 <script setup>
-import { computed } from 'vue'
+import { computed, onMounted } from 'vue'
+import { useAccountDisplay } from '@/composables/useAccountDisplay'
 
 const props = defineProps({
   modelValue: {
@@ -9,6 +10,7 @@ const props = defineProps({
 })
 
 const emit = defineEmits(['update:modelValue'])
+const { accountInitials, accountName, accountSubtitle, ensureUser } = useAccountDisplay()
 
 const drawer = computed({
   get: () => props.modelValue,
@@ -22,6 +24,10 @@ const navItems = [
   { title: 'Báo cáo', to: '/reports', icon: 'mdi-chart-box-outline' },
   { title: 'Cài đặt', to: '/settings', icon: 'mdi-cog-outline' },
 ]
+
+onMounted(() => {
+  ensureUser().catch(() => {})
+})
 </script>
 
 <template>
@@ -58,11 +64,11 @@ const navItems = [
     <template #append>
       <div class="drawer-profile">
         <v-avatar color="primary" size="36">
-          <span class="text-subtitle-2">AD</span>
+          <span class="text-subtitle-2">{{ accountInitials }}</span>
         </v-avatar>
         <div class="profile-copy">
-          <div class="profile-name">Quản trị viên</div>
-          <div class="profile-role">Quản trị hệ thống</div>
+          <div class="profile-name">{{ accountName }}</div>
+          <div class="profile-role">{{ accountSubtitle }}</div>
         </div>
       </div>
     </template>
