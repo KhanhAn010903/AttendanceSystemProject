@@ -1,9 +1,39 @@
 <script setup>
+import { computed, onMounted } from 'vue'
+import { storeToRefs } from 'pinia'
 import { useRouter } from 'vue-router'
-import { authApi } from '@/api'
+import { useAuthStore } from '@/stores/auth'
 
 const emit = defineEmits(['toggle-drawer'])
 const router = useRouter()
+const authStore = useAuthStore()
+const { user } = storeToRefs(authStore)
+
+const accountName = computed(() => user.value?.name || user.value?.email || 'Tai khoan')
+
+const accountSubtitle = computed(() => {
+  const roles = user.value?.roles
+
+  if (Array.isArray(roles) && roles.length > 0) {
+    return roles.map((role) => role.name || role).filter(Boolean).join(', ')
+  }
+
+  return user.value?.role?.name || user.value?.role || user.value?.email || 'Nguoi dung'
+})
+
+const accountInitials = computed(() => {
+  const nameParts = accountName.value.trim().split(/\s+/).filter(Boolean)
+
+  if (nameParts.length === 0) {
+    return 'TK'
+  }
+
+  return nameParts
+    .slice(0, 2)
+    .map((part) => part[0])
+    .join('')
+    .toUpperCase()
+})
 
 const accountMenuItems = [
   { title: 'Thông tin', icon: 'mdi-account-outline', to: '/account/profile' },
@@ -16,9 +46,15 @@ const handleAccountAction = async (item) => {
     return
   }
 
-  await authApi.logout()
+  await authStore.logout()
   router.replace('/login')
 }
+
+onMounted(() => {
+  if (authStore.token && !user.value) {
+    authStore.fetchUser().catch(() => {})
+  }
+})
 </script>
 
 <template>
@@ -47,11 +83,11 @@ const handleAccountAction = async (item) => {
       <v-card class="account-menu" elevation="8" min-width="240">
         <div class="account-menu__profile">
           <v-avatar color="primary" size="40">
-            <span class="text-subtitle-2">QT</span>
+            <span class="text-subtitle-2">{{ accountInitials }}</span>
           </v-avatar>
           <div>
-            <div class="account-menu__name">Quản trị viên</div>
-            <div class="account-menu__role">Quản trị hệ thống</div>
+            <div class="account-menu__name">{{ accountName }}</div>
+            <div class="account-menu__role">{{ accountSubtitle }}</div>
           </div>
         </div>
 

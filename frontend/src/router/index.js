@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import { isAuthenticated as hasAuthSession } from '@/api/auth'
+import { useAuthStore } from '@/stores/auth'
 import HomeView from '../views/HomeView.vue'
 import PlaceholderView from '../views/PlaceholderView.vue'
 
@@ -80,7 +80,8 @@ const router = createRouter({
 })
 
 router.beforeEach((to) => {
-  const isAuthenticated = hasAuthSession()
+  const authStore = useAuthStore()
+  const isAuthenticated = authStore.isAuthenticated
 
   if (to.meta.requiresAuth && !isAuthenticated) {
     return {

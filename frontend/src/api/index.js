@@ -1,5 +1,5 @@
 export { default as http, API_BASE_URL } from './http'
-export { authApi, clearAuthSession, getAuthUser, isAuthenticated } from './auth'
+export { authApi } from './auth'
 export { permissionsApi } from './permissions'
 export { rolesApi } from './roles'
 export { usersApi } from './users'

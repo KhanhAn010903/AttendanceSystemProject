@@ -1,27 +1,26 @@
 <script setup>
 import { reactive, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { authApi } from '@/api'
+import { useAuthStore } from '@/stores/auth'
 
 const route = useRoute()
 const router = useRouter()
+const authStore = useAuthStore()
 
 const showPassword = ref(false)
-const loading = ref(false)
 const errorMessage = ref('')
 
 const form = reactive({
-  email: 'admin@attendance.local',
+  email: '',
   password: '',
   remember: true,
 })
 
 const login = async () => {
-  loading.value = true
   errorMessage.value = ''
 
   try {
-    await authApi.login({
+    await authStore.login({
       email: form.email,
       password: form.password,
     })
@@ -32,10 +31,7 @@ const login = async () => {
 
     router.replace(redirectPath || '/')
   } catch (error) {
-    errorMessage.value =
-      error.response?.data?.message || 'Dang nhap khong thanh cong. Vui long thu lai.'
-  } finally {
-    loading.value = false
+    errorMessage.value = authStore.error || error.response?.data?.message
   }
 }
 </script>
@@ -61,7 +57,7 @@ const login = async () => {
         </v-card-subtitle>
 
         <v-card-text>
-          <v-form @submit.prevent="login">
+          <v-form @submit.prevent="login" au>
             <v-alert
               v-if="errorMessage"
               class="mb-4"
@@ -107,7 +103,7 @@ const login = async () => {
             <v-btn
               block
               color="primary"
-              :loading="loading"
+              :loading="authStore.loading"
               prepend-icon="mdi-login"
               size="large"
               type="submit"
