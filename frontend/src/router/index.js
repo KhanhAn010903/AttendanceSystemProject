@@ -1,8 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import { isAuthenticated as hasAuthSession } from '@/api/auth'
 import HomeView from '../views/HomeView.vue'
 import PlaceholderView from '../views/PlaceholderView.vue'
-
-export const AUTH_STORAGE_KEY = 'attendance_auth'
 
 const placeholderRoutes = [
   {
@@ -81,7 +80,7 @@ const router = createRouter({
 })
 
 router.beforeEach((to) => {
-  const isAuthenticated = localStorage.getItem(AUTH_STORAGE_KEY) === 'true'
+  const isAuthenticated = hasAuthSession()
 
   if (to.meta.requiresAuth && !isAuthenticated) {
     return {

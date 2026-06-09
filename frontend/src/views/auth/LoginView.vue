@@ -1,13 +1,14 @@
 <script setup>
 import { reactive, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { AUTH_STORAGE_KEY } from '../../router'
+import { authApi } from '@/api'
 
 const route = useRoute()
 const router = useRouter()
 
 const showPassword = ref(false)
 const loading = ref(false)
+const errorMessage = ref('')
 
 const form = reactive({
   email: 'admin@attendance.local',
@@ -17,16 +18,25 @@ const form = reactive({
 
 const login = async () => {
   loading.value = true
+  errorMessage.value = ''
 
-  window.setTimeout(() => {
+  try {
+    await authApi.login({
+      email: form.email,
+      password: form.password,
+    })
+
     const redirectPath = Array.isArray(route.query.redirect)
       ? route.query.redirect[0]
       : route.query.redirect
 
-    localStorage.setItem(AUTH_STORAGE_KEY, 'true')
-    loading.value = false
     router.replace(redirectPath || '/')
-  }, 300)
+  } catch (error) {
+    errorMessage.value =
+      error.response?.data?.message || 'Dang nhap khong thanh cong. Vui long thu lai.'
+  } finally {
+    loading.value = false
+  }
 }
 </script>
 
@@ -52,6 +62,16 @@ const login = async () => {
 
         <v-card-text>
           <v-form @submit.prevent="login">
+            <v-alert
+              v-if="errorMessage"
+              class="mb-4"
+              density="compact"
+              type="error"
+              variant="tonal"
+            >
+              {{ errorMessage }}
+            </v-alert>
+
             <v-text-field
               v-model="form.email"
               autocomplete="email"

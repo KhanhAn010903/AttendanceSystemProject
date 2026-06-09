@@ -1,6 +1,6 @@
 <script setup>
 import { useRouter } from 'vue-router'
-import { AUTH_STORAGE_KEY } from '../../router'
+import { authApi } from '@/api'
 
 const emit = defineEmits(['toggle-drawer'])
 const router = useRouter()
@@ -11,12 +11,12 @@ const accountMenuItems = [
   { title: 'Đăng xuất', icon: 'mdi-logout', danger: true, action: 'logout' },
 ]
 
-const handleAccountAction = (item) => {
+const handleAccountAction = async (item) => {
   if (item.action !== 'logout') {
     return
   }
 
-  localStorage.removeItem(AUTH_STORAGE_KEY)
+  await authApi.logout()
   router.replace('/login')
 }
 </script>
