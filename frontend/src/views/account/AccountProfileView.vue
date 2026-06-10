@@ -12,7 +12,8 @@ const account = reactive({
 </script>
 
 <template>
-  <div class="page-heading">
+  <div class="account-profile-page">
+    <div class="page-heading">
     <div>
       <p class="eyebrow">Tài khoản</p>
       <h1>Thông tin tài khoản</h1>
@@ -98,6 +99,7 @@ const account = reactive({
       </v-card>
     </v-col>
   </v-row>
+  </div>
 </template>
 
 <style scoped>

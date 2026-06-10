@@ -30,7 +30,7 @@ class AuthController extends Controller
         $user->assignRole($roleDefault);
         $token = $user->createToken('auth_token')->plainTextToken;
         return response()->json([
-            'user' => $user,
+            'user' => $this->userWithRole($user),
             'token' => $token
         ]);
     }
@@ -52,9 +52,14 @@ class AuthController extends Controller
         $token = $user->createToken('auth_token')->plainTextToken;
 
         return response()->json([
-            'user' => $user,
+            'user' => $this->userWithRole($user),
             'token' => $token
         ]);
+    }
+
+    public function me(Request $request)
+    {
+        return response()->json($this->userWithRole($request->user()));
     }
 
     public function logout(Request $request)
@@ -64,5 +69,19 @@ class AuthController extends Controller
         return response()->json([
             'message' => 'Logout successfully'
         ]);
+    }
+
+    private function userWithRole(User $user): array
+    {
+        $user->loadMissing('roles');
+
+        $role = $user->roles->first();
+
+        return array_merge(
+            $user->makeHidden('roles')->toArray(),
+            [
+                'role' => $role ? $role->makeHidden('pivot')->toArray() : null,
+            ]
+        );
     }
 }

@@ -12,7 +12,8 @@ defineProps({
 </script>
 
 <template>
-  <div class="page-heading">
+  <div class="placeholder-page">
+    <div class="page-heading">
     <div>
       <p class="eyebrow">Phân hệ</p>
       <h1>{{ title }}</h1>
@@ -46,6 +47,7 @@ defineProps({
       </v-card>
     </v-col>
   </v-row>
+  </div>
 </template>
 
 <style scoped>

@@ -9,13 +9,19 @@ export const useAccountDisplay = () => {
   const accountName = computed(() => user.value?.name || user.value?.email || 'Tai khoan')
 
   const accountSubtitle = computed(() => {
+    const role = user.value?.role
+
+    if (role) {
+      return role.name || role
+    }
+
     const roles = user.value?.roles
 
     if (Array.isArray(roles) && roles.length > 0) {
-      return roles.map((role) => role.name || role).filter(Boolean).join(', ')
+      return roles[0]?.name || roles[0]
     }
 
-    return user.value?.role?.name || user.value?.role || user.value?.email || 'Nguoi dung'
+    return user.value?.email || 'Nguoi dung'
   })
 
   const accountInitials = computed(() => {

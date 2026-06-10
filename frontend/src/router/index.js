@@ -5,12 +5,6 @@ import PlaceholderView from '../views/PlaceholderView.vue'
 
 const placeholderRoutes = [
   {
-    path: '/employees',
-    name: 'employees',
-    title: 'Nhân viên',
-    description: 'Quản lý hồ sơ nhân viên, phòng ban và trạng thái làm việc.',
-  },
-  {
     path: '/attendance',
     name: 'attendance',
     title: 'Chấm công',
@@ -61,6 +55,30 @@ const router = createRouter({
       path: '/account/change-password',
       name: 'account-change-password',
       component: () => import('../views/account/ChangePasswordView.vue'),
+      meta: {
+        requiresAuth: true,
+      },
+    },
+    {
+      path: '/permissions',
+      name: 'permissions',
+      component: () => import('../views/permissions/PermissionsView.vue'),
+      meta: {
+        requiresAuth: true,
+      },
+    },
+    {
+      path: '/roles',
+      name: 'roles',
+      component: () => import('../views/roles/RolesView.vue'),
+      meta: {
+        requiresAuth: true,
+      },
+    },
+    {
+      path: '/employees',
+      name: 'employees',
+      component: () => import('../views/users/UsersView.vue'),
       meta: {
         requiresAuth: true,
       },

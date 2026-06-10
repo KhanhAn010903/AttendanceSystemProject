@@ -45,7 +45,8 @@ const schedules = [
 </script>
 
 <template>
-  <div class="page-heading">
+  <div class="home-page">
+    <div class="page-heading">
     <div>
       <p class="eyebrow">Tổng quan</p>
       <h1>Tổng quan quản trị</h1>
@@ -123,6 +124,7 @@ const schedules = [
       </v-card>
     </v-col>
   </v-row>
+  </div>
 </template>
 
 <style scoped>

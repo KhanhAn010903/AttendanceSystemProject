@@ -17,7 +17,8 @@ const loading = ref(false)
 </script>
 
 <template>
-  <div class="page-heading">
+  <div class="change-password-page">
+    <div class="page-heading">
     <div>
       <p class="eyebrow">Tài khoản</p>
       <h1>Đổi mật khẩu</h1>
@@ -99,6 +100,7 @@ const loading = ref(false)
       </v-card>
     </v-col>
   </v-row>
+  </div>
 </template>
 
 <style scoped>
