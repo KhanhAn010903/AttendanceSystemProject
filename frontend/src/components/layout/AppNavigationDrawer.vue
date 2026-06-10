@@ -19,11 +19,11 @@ const drawer = computed({
 
 const navItems = [
   { title: 'Tổng quan', to: '/', icon: 'mdi-view-dashboard-outline' },
-  { title: 'Nhân viên', to: '/employees', icon: 'mdi-account-group-outline' },
   { title: 'Chấm công', to: '/attendance', icon: 'mdi-calendar-check-outline' },
   { title: 'Báo cáo', to: '/reports', icon: 'mdi-chart-box-outline' },
-  { title: 'Roles', to: '/roles', icon: 'mdi-account-key-outline' },
-  { title: 'Permissions', to: '/permissions', icon: 'mdi-shield-key-outline' },
+  { title: 'Nhân viên', to: '/employees', icon: 'mdi-account-group-outline' },
+  { title: 'Vai trò', to: '/roles', icon: 'mdi-account-key-outline' },
+  { title: 'Quyền hạn', to: '/permissions', icon: 'mdi-shield-key-outline' },
   { title: 'Cài đặt', to: '/settings', icon: 'mdi-cog-outline' },
 ]
 
